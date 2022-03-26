@@ -3,10 +3,12 @@ const { Component } = React;
 
 class WordRelay extends Component {
 	state = {
-		test: 'Hello, World',
+		word: '감자탕',
+		value: '',
+		result: '',
 	};
 	render() {
-		return <h1>{this.state.test}</h1>;
+		return <h1>{this.state.word}</h1>;
 	}
 }
 
