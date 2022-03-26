@@ -30,10 +30,11 @@ module.exports = {
 	output: {
 		path: path.join(__dirname, 'dist'),
 		filename: 'app.js',
+		publicPath: '/dist',
 	},
 	devServer: {
-		devMiddleware: { publicPath: '/dist/' },
-		static: { directory: path.resolve(__dirname) },
+		devMiddleware: { publicPath: '/dist' }, //webpack이 생성해준 파일들의 경로
+		static: { directory: path.resolve(__dirname) }, //실제로 존재하는 정적파일들의 정보
 		hot: true,
 	},
 };
