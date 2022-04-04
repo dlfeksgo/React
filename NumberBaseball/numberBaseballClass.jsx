@@ -76,7 +76,7 @@ class NumberBaseball extends Component {
 	};
 
 	onChangeInput = (e) => {
-		console.log(this.state.answer);
+		// console.log(this.state.answer);
 		this.setState({
 			value: e.target.value,
 		});
@@ -98,7 +98,7 @@ class NumberBaseball extends Component {
 				<p>시도: {this.state.tries.length}</p>
 				<ul>
 					{this.state.tries.map((v, i) => {
-						return <Try key={v.try + v.result} value={v} />;
+						return <Try key={i} value={v} />;
 					})}
 				</ul>
 			</>
