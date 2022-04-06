@@ -5,6 +5,13 @@ class Test extends Component {
 		counter: 0,
 	};
 
+	// shouldComponentUpdate(nextProps, nextState, nextContext) {
+	// 	if (this.state.counter !== nextState.counter) {
+	// 		return true;
+	// 	}
+	// 	return false;
+	// }
+
 	onClick = () => {
 		this.setState({});
 	};

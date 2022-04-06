@@ -14,6 +14,7 @@
 // export default Try;
 
 import React from 'react';
+import { memo } from 'react';
 
 const Try = ({ tryInfo }) => {
 	return (
@@ -23,4 +24,4 @@ const Try = ({ tryInfo }) => {
 		</li>
 	);
 };
-export default Try;
+export default memo(Try);

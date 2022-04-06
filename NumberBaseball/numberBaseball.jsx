@@ -25,6 +25,7 @@ const NumberBaseball = () => {
 			setTries((prevTries) => {
 				return [...prevTries, { try: value, result: '홈런' }];
 			});
+			setValue('');
 		} else {
 			const answerArray = value.split('').map((v) => {
 				return parseInt(v);
