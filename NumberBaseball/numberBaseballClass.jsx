@@ -98,7 +98,7 @@ class NumberBaseball extends Component {
 				<p>시도: {this.state.tries.length}</p>
 				<ul>
 					{this.state.tries.map((v, i) => {
-						return <Try key={i} value={v} />;
+						return <Try key={i} tryInfo={v} />;
 					})}
 				</ul>
 			</>
