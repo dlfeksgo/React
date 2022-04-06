@@ -46,6 +46,24 @@ class ResponseCheck extends Component {
 		}
 	};
 
+	onClickBtn = () => {
+		this.setState({
+			state: 'waiting',
+			message: '준비가 되면 클릭해주세요😀',
+			result: [],
+		});
+	};
+
+	renderAverage = () => {
+		const { result } = this.state;
+		return result.length === 0 ? null : (
+			<>
+				<div>평균 {result.reduce((a, b) => a + b) / result.length} ms</div>
+				<button onClick={this.onClickBtn}>리셋</button>
+			</>
+		);
+	};
+
 	render() {
 		const { state, message, result } = this.state;
 		return (
@@ -53,11 +71,7 @@ class ResponseCheck extends Component {
 				<div id="screen" className={state} onClick={this.onClickScreen}>
 					{message}
 				</div>
-				<div>
-					{result.length === 0 ? null : (
-						<div>평균 {result.reduce((a, b) => a + b) / result.length} ms</div>
-					)}
-				</div>
+				{this.renderAverage()}
 			</>
 		);
 	}
