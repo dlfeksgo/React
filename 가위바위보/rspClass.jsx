@@ -15,13 +15,16 @@ class RspGame extends Component {
 	};
 
 	interval;
+	clickable = true;
 
 	componentDidMount() {
+		console.log('어디보자');
 		this.interval = setInterval(this.computerChange, 50);
 	}
 
-	componentWillMount() {
-		clearInterval(this.interval);
+	UNSAFE_componentWillMount() {
+		console.log('삭제');
+		// clearInterval(this.interval);
 	}
 
 	computerChange = () => {
@@ -42,7 +45,11 @@ class RspGame extends Component {
 	};
 
 	onClickBtn = (e) => {
+		if (!this.clickable) {
+			return;
+		}
 		clearInterval(this.interval);
+		this.clickable = false;
 		const myChoice = e.target.id;
 		const { imgCoord } = this.state;
 		if (myChoice === 'scissors') {
@@ -120,6 +127,7 @@ class RspGame extends Component {
 		}
 		setTimeout(() => {
 			this.interval = setInterval(this.computerChange, 50);
+			this.clickable = true;
 		}, 2000);
 	};
 
