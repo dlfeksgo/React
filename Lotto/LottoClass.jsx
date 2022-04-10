@@ -51,10 +51,6 @@ class Lotto extends Component {
 		});
 	}
 
-	test = () => {
-		console.log(this.state.winBalls);
-	};
-
 	render() {
 		const { winBalls, bonus } = this.state;
 		return (
