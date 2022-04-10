@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Ball from './Ball';
 
 function getWinNumbers() {
 	const shuffled = [];
@@ -28,7 +29,6 @@ class Lotto extends Component {
 
 	timeouts = [];
 	componentDidMount() {
-		console.log(this.state.numbers);
 		for (let j = 0; j < 6; j++) {
 			this.timeouts[j] = setTimeout(() => {
 				this.setState((prevState) => {
@@ -51,11 +51,22 @@ class Lotto extends Component {
 		});
 	}
 
+	test = () => {
+		console.log(this.state.winBalls);
+	};
+
 	render() {
+		const { winBalls, bonus } = this.state;
 		return (
 			<>
-				<div>추첨결과 : {this.state.winBalls}</div>
-				<div>보너스 : {this.state.bonus}</div>
+				<div> 추첨결과 </div>
+				<div>
+					{winBalls.map((v) => (
+						<Ball number={v} />
+					))}
+				</div>
+				<div>보너스!</div>
+				{bonus && <Ball number={bonus} />}
 			</>
 		);
 	}
