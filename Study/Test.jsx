@@ -15,7 +15,11 @@ const Nav = ({ topics, onChangeMode }) => {
 	for (let i = 0; i < topics.length; i++) {
 		lis.push(
 			<li key={topics[i].id}>
-				<a href={'/read/' + topics[i].id} onClick={onChangeMode}>
+				<a
+					id={topics[i].id}
+					href={'/read/' + topics[i].id}
+					onClick={onChangeMode}
+				>
 					{topics[i].title}
 				</a>
 			</li>
@@ -40,6 +44,13 @@ const Article = ({ title, body }) => {
 
 const Test = () => {
 	const [mode, setMode] = useState('WELCOME');
+	const [id, setId] = useState(null);
+
+	const topics = [
+		{ id: 1, title: 'html', body: 'html is ...' },
+		{ id: 2, title: 'css', body: 'css is ...' },
+		{ id: 3, title: 'javascript', body: 'javascript is ...' },
+	];
 
 	const onChangeModeHeader = (e) => {
 		e.preventDefault();
@@ -49,18 +60,28 @@ const Test = () => {
 	const onChangeModeNav = (e) => {
 		e.preventDefault();
 		setMode('READ');
+		setId(e.target.id);
 	};
 
-	const topics = [
-		{ id: 1, title: 'html', body: 'html is ...' },
-		{ id: 2, title: 'css', body: 'css is ...' },
-		{ id: 3, title: 'javascript', body: 'javascript is ...' },
-	];
+	let content = null;
+	if (mode === 'WELCOME') {
+		content = <Article title='Welcome' body='Welcome이닷!' />;
+	} else if (mode === 'READ') {
+		let title, body;
+		topics.map((v) => {
+			if (v.id === id) {
+				title = v.title;
+				body = v.body;
+			}
+		});
+		content = <Article title={title} body={body} />;
+	}
+
 	return (
 		<>
 			<Header title='REACT' onChangeMode={onChangeModeHeader} />
 			<Nav topics={topics} onChangeMode={onChangeModeNav} />
-			<Article title='Welcome' body='Hello React!' />
+			{content}
 		</>
 	);
 };
