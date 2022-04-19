@@ -3,7 +3,7 @@ import React, { useCallback, useState } from 'react';
 const Header = ({ title, onChangeMode }) => {
 	return (
 		<h1>
-			<a href="/" onClick={onChangeMode}>
+			<a className="head" href="/" onClick={onChangeMode}>
 				{title}
 			</a>
 		</h1>
@@ -16,6 +16,7 @@ const Nav = ({ topics, onChangeMode }) => {
 		lis.push(
 			<li key={topics[i].id}>
 				<a
+					className="lis"
 					id={topics[i].id}
 					href={'/read/' + topics[i].id}
 					onClick={onChangeMode}
@@ -43,17 +44,17 @@ const Article = ({ title, body }) => {
 };
 
 const Create = ({ onCreate }) => {
+	const onSubmitFrom = useCallback((e) => {
+		e.preventDefault();
+		const title = e.target.title.value;
+		const body = e.target.body.value;
+		onCreate(title, body);
+	}, []);
+
 	return (
 		<>
 			<h1>Create</h1>
-			<form
-				onSubmit={(e) => {
-					e.preventDefault();
-					const title = e.target.title.value;
-					const body = e.target.body.value;
-					onCreate(title, body);
-				}}
-			>
+			<form onSubmit={onSubmitFrom}>
 				<p>
 					<input name="title" type="text" placeholder="title" />
 				</p>
@@ -82,29 +83,48 @@ const Test = () => {
 		{ id: 3, title: 'javascript', body: 'javascript is ...' },
 	]);
 
-	const onChangeModeHeader = useCallback(
-		(e) => {
-			e.preventDefault();
-			setMode('WELCOME');
-		},
-		[mode]
-	);
+	// const onChangeModeHeader = useCallback(
+	// 	(e) => {
+	// 		e.preventDefault();
+	// 		setMode('WELCOME');
+	// 	},
+	// 	[mode]
+	// );
 
-	const onChangeModeNav = useCallback(
+	// const onChangeModeNav = useCallback(
+	// 	(e) => {
+	// 		e.preventDefault();
+	// 		setMode('READ');
+	// setId(Number(e.target.id));
+	// 	},
+	// 	[mode, id]
+	// );
+
+	// const onChangeModeCreateList = useCallback(
+	// 	(e) => {
+	// 		e.preventDefault();
+	// 		setMode('CREATE');
+	// 	},
+	// 	[mode]
+	// );
+
+	const onChangeMode = useCallback(
 		(e) => {
 			e.preventDefault();
-			setMode('READ');
-			setId(Number(e.target.id));
+			switch (e.target.className) {
+				case 'head':
+					setMode('WELCOME');
+					break;
+				case 'lis':
+					setMode('READ');
+					setId(Number(e.target.id));
+					break;
+				case 'createBtn':
+					setMode('CREATE');
+					break;
+			}
 		},
 		[mode, id]
-	);
-
-	const onChangeModeCreateList = useCallback(
-		(e) => {
-			e.preventDefault();
-			setMode('CREATE');
-		},
-		[mode]
 	);
 
 	const onCreateList = useCallback(
@@ -135,10 +155,10 @@ const Test = () => {
 
 	return (
 		<>
-			<Header title="REACT" onChangeMode={onChangeModeHeader} />
-			<Nav topics={topics} onChangeMode={onChangeModeNav} />
+			<Header title="REACT" onChangeMode={onChangeMode} />
+			<Nav topics={topics} onChangeMode={onChangeMode} />
 			{content}
-			<a href="/create" onClick={onChangeModeCreateList}>
+			<a className="createBtn" href="/create" onClick={onChangeMode}>
 				create
 			</a>
 		</>
