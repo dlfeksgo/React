@@ -73,6 +73,63 @@ const Create = ({ onCreate }) => {
 	);
 };
 
+const Update = ({ onUpdate, title, body, id }) => {
+	const [_title, setTitle] = useState(title);
+	const [_body, setBody] = useState(body);
+	const [_id, setId] = useState(id);
+
+	const onSubmitFrom = useCallback((e) => {
+		e.preventDefault();
+		const id = _id;
+		const title = e.target.title.value;
+		const body = e.target.body.value;
+		onUpdate(id, title, body);
+	}, []);
+
+	const onChangeTitle = useCallback(
+		(e) => {
+			setTitle(e.target.value);
+		},
+		[_title]
+	);
+
+	const onChangeBody = useCallback(
+		(e) => {
+			setBody(e.target.value);
+		},
+		[_body]
+	);
+
+	return (
+		<>
+			<h1>Update</h1>
+			<form onSubmit={onSubmitFrom}>
+				<p>
+					<input
+						name="title"
+						type="text"
+						placeholder="title"
+						value={_title}
+						onChange={onChangeTitle}
+					/>
+				</p>
+				<p>
+					<textarea
+						name="body"
+						id=""
+						cols="20"
+						rows="2"
+						placeholder="body"
+						value={_body}
+						onChange={onChangeBody}
+					></textarea>
+				</p>
+				<button type="submit">Update</button>
+			</form>
+		</>
+	);
+};
+
 const Test = () => {
 	const [mode, setMode] = useState('WELCOME');
 	const [id, setId] = useState(null);
@@ -82,31 +139,6 @@ const Test = () => {
 		{ id: 2, title: 'css', body: 'css is ...' },
 		{ id: 3, title: 'javascript', body: 'javascript is ...' },
 	]);
-
-	// const onChangeModeHeader = useCallback(
-	// 	(e) => {
-	// 		e.preventDefault();
-	// 		setMode('WELCOME');
-	// 	},
-	// 	[mode]
-	// );
-
-	// const onChangeModeNav = useCallback(
-	// 	(e) => {
-	// 		e.preventDefault();
-	// 		setMode('READ');
-	// setId(Number(e.target.id));
-	// 	},
-	// 	[mode, id]
-	// );
-
-	// const onChangeModeCreateList = useCallback(
-	// 	(e) => {
-	// 		e.preventDefault();
-	// 		setMode('CREATE');
-	// 	},
-	// 	[mode]
-	// );
 
 	const onChangeMode = useCallback(
 		(e) => {
@@ -121,6 +153,9 @@ const Test = () => {
 					break;
 				case 'createBtn':
 					setMode('CREATE');
+					break;
+				case 'updateBtn':
+					setMode('UPDATE');
 					break;
 			}
 		},
@@ -140,7 +175,55 @@ const Test = () => {
 		[topics, mode, id, nextId]
 	);
 
+	const onUpdateList = useCallback(
+		(id, _title, _body) => {
+			const newTopics = [...topics];
+			const updatedTopic = { id: id, title: _title, body: _body };
+			for (let i = 0; i < newTopics.length; i++) {
+				if (newTopics[i].id === id) {
+					console.log(newTopics[i]);
+					newTopics[i] = updatedTopic;
+				}
+			}
+			// newTopics.map((v) => {
+			// 	if (v.id === id) {
+			// 		v.title = updatedTopic.title;
+			// 		v.body = updatedTopic.body;
+			// 	}
+			// });
+			setTopics(newTopics);
+			setMode('READ');
+		},
+		[topics]
+	);
+
+	// const onDeleteList = useCallback(
+	// 	(e) => {
+	// 		const newTopics = [];
+	// 		console.log(e);
+	// 		// topics.map((v) => {
+	// 		// 	console.log(id);
+	// 		// });
+	// 	},
+	// 	[topics]
+	// );
+
+	const Delete = ({ id }) => {
+		const onDeleteList = useCallback(() => {
+			const newTopics = [];
+			topics.map((v) => {
+				if (v.id !== id) {
+					newTopics.push(v);
+				}
+			});
+			setTopics(newTopics);
+		}, [topics]);
+
+		return <button onClick={onDeleteList}>Delete</button>;
+	};
+
 	let content = null;
+	let updateControl = null;
 	if (mode === 'WELCOME') {
 		content = <Article title="Welcome" body="Welcome이닷!" />;
 	} else if (mode === 'READ') {
@@ -149,8 +232,34 @@ const Test = () => {
 				content = <Article title={v.title} body={v.body} />;
 			}
 		});
+		updateControl = (
+			<>
+				<li>
+					<a className="updateBtn" href="/update" onClick={onChangeMode}>
+						update
+					</a>
+				</li>
+				<p>
+					{/* <button onClick={onDeleteList}>Delete</button> */}
+					<Delete id={id} />
+				</p>
+			</>
+		);
 	} else if (mode === 'CREATE') {
 		content = <Create onCreate={onCreateList} />;
+	} else if (mode === 'UPDATE') {
+		topics.map((v) => {
+			if (v.id === id) {
+				content = (
+					<Update
+						id={v.id}
+						title={v.title}
+						body={v.body}
+						onUpdate={onUpdateList}
+					/>
+				);
+			}
+		});
 	}
 
 	return (
@@ -158,9 +267,14 @@ const Test = () => {
 			<Header title="REACT" onChangeMode={onChangeMode} />
 			<Nav topics={topics} onChangeMode={onChangeMode} />
 			{content}
-			<a className="createBtn" href="/create" onClick={onChangeMode}>
-				create
-			</a>
+			<ul>
+				<li>
+					<a className="createBtn" href="/create" onClick={onChangeMode}>
+						create
+					</a>
+				</li>
+				{updateControl}
+			</ul>
 		</>
 	);
 };
